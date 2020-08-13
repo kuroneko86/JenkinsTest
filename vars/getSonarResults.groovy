@@ -3,22 +3,40 @@ def call() {
     def loopinterator = 0
     def checkStatusPattern = '"status":"SUCCESS"'
     def continue = false
-    
+
     do {
-        printlin "Checking results..."
+        printlin "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
         if(getSonarResults =~ checkStatusPattern) {
-            printlin "Results completed"
+            printlin "Report ready"
             $continue = true
         }
         elseif (loopinterator >= loopLimit{
-            printlin "Results are still not ready, aborting"
-            $continue = true
+            error ("Report is taking too long, aborting")            
         }
         else {
-            printlin "Results not ready yet, waiting 5 seconds";
+            printlin "Report not ready yet, waiting 5 seconds";
             loopinterator++
             sleep(5000)
         }
     } while ($continue)
+
+    if(!$abort) {
+        def resultsPattern = 'total":([^,]*)'
+        def severityLimit = 25
+
+        def checkBlockers = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER", returnStdout: true)
+        def resultsBlockers = (checkBlockers =~ taskIDPattern).findAll().first()
+        if($resultsBlockers > 0)
+        {
+            error("Blocker found in results, aborting")
+        }
+
+        def checkSeverity = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR", returnStdout: true)
+        def resultsSeverity = (checkSeverity =~ taskIDPattern).findAll().first()
+        if($resultsSeverity > $severityLimit)
+        {
+            error("Too many errors reported, aborting")
+        }
+    }
 }
