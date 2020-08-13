@@ -1,3 +1,3 @@
 def call() {
-    echo "sonar-scanner-4.4.0.2170-linux/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey} -Dsonar.sources=${sonarFolder} -Dsonar.host.url=http://192.168.10.106:9000 -Dsonar.login=${sonarLogin}"
+    echo "sonarscanner/bin/sonar-scanner -Dsonar.projectKey=${sonarProjectKey} -Dsonar.sources=${sonarFolder} -Dsonar.host.url=http://192.168.10.106:9000 -Dsonar.login=${sonarLogin}"
 }
