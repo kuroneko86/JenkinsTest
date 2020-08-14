@@ -5,4 +5,5 @@ def call() {
     println execSonar
     def sonarTaskID = (execSonar =~ taskIDPattern).findAll().first()
     println sonarTaskID
+    env.sonarTaskID = sonarTaskID
 }
