@@ -27,8 +27,10 @@ def call() {
     def resultsBlockers = (checkBlockers =~ resultsPattern).findAll().first()
     regex = resultsBlockers.first()
     result = regex.substring((regex.indexOf(':') + 1))
+    resultint = result as int
     println result.toInteger
-    if(result.toInteger > 0) {
+    println resultint
+    if(resultint > 0) {
         error("Blocker found in results, aborting")
     }
     else {
