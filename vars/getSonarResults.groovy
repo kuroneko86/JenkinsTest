@@ -3,7 +3,7 @@ def call() {
     def loopinterator = 0
     def checkStatusPattern = '"status":"SUCCESS"'
     def proceed = 0
-    def resultsPattern = 'total":([^,]*)'
+    def resultsPattern = 'total":(.[^,}]*)'
     def severityLimit = 25
 
     while (proceed) {
@@ -25,7 +25,7 @@ def call() {
 
     def checkBlockers = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER", returnStdout: true)
     def resultsBlockers = (checkBlockers =~ resultsPattern).findAll().first()
-    println resultsBlockers.first().first()
+    println resultsBlockers.first()
     /*if(resultsBlockers.toInteger() > 0) {
         error("Blocker found in results, aborting")
     }
