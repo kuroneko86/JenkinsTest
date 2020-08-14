@@ -11,8 +11,8 @@ def call() {
     while (!proceed) {
         println "Checking report readiness..."
         
-        reportStatus = sonarQube.getSonarQubeResults(sonarTaskID)
-        
+        json = sonarQube.getSonarQubeResults(sonarTaskID)
+        reportStatus = script.readJSON(json)
         println reportStatus[0]
         println reportStatus[1]
         println reportStatus[0][0]
