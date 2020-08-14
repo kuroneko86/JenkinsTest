@@ -5,13 +5,18 @@ import groovy.json.JsonSlurperClassic
 
 class sonarQube {
 
+    sonarQube(steps)
+    {
+        this.steps = steps
+    }
+
     @NonCPS
     def getSonarQubeResults(String url)
     {
         println url
 
         def jsonSlurper = new JsonSlurperClassic()
-        def getSonarResults = steps.sh(script: "curl " + url, returnStdout: true)
+        def getSonarResults = this.steps.sh(script: "curl " + url, returnStdout: true)
         def reportStatus = jsonSlurper.parseText(getSonarResults)
 
         println reportStatus

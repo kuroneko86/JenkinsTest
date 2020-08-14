@@ -6,7 +6,7 @@ def call() {
     def proceed = 0
     def severityLimit = 25
 
-    def sonarQube = new sonarQube()
+    def sonarQube = new sonarQube(steps)
 
     while (!proceed) {
         println "Checking report readiness..."
