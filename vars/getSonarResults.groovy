@@ -41,7 +41,7 @@ def call() {
             error("Too many errors reported, aborting")
         }
         else {
-            println "Number of errors (" + resultsSeverity + "") below limit (" + severityLimit + ") found"
+            println "Number of errors (" + resultsSeverity + ") below limit (" + severityLimit + ") found"
         }
     }
 }
