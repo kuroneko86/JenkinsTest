@@ -7,7 +7,7 @@ def call() {
     def severityLimit = 25
     def jsonSlurper = new JsonSlurperClassic()
 
-    while (!proceed) {
+    @NonCPS while (!proceed) {
         println "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
         def reportStatus = jsonSlurper.parseText(getSonarResults)
