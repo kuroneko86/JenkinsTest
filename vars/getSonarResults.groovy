@@ -26,7 +26,7 @@ def call() {
     def checkBlockers = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER", returnStdout: true)
     def resultsBlockers = (checkBlockers =~ resultsPattern).findAll().first()
     regex = resultsBlockers.first()
-    result = regex.substring(regex.indexOf(':'))
+    result = regex.substring((regex.indexOf(':') + ))
     println result
     /*if(resultsBlockers.toInteger() > 0) {
         error("Blocker found in results, aborting")
