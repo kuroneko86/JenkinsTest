@@ -1,5 +1,6 @@
 package com.kukan
 
+import com.cloudbees.groovy.cps.NonCPS
 import groovy.json.JsonSlurperClassic
 
 @NONCPS
