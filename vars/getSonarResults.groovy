@@ -23,7 +23,7 @@ def call() {
         }
     }
 
-    def checkBlockers = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER", returnStdout: true)
+    def checkBlockers = steps.sh(script: "curl 'http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER'", returnStdout: true)
     def resultsBlockers = (checkBlockers =~ resultsPattern).findAll().first()
     regex = resultsBlockers.first()
     result = regex.substring((regex.indexOf(':') + 1))
@@ -37,13 +37,18 @@ def call() {
         println "No blockers found"
     }
 
-/*
-    def checkSeverity = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR", returnStdout: true)
+
+    def checkSeverity = steps.sh(script: "curl 'http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR'", returnStdout: true)
     def resultsSeverity = (checkSeverity =~ resultsPattern).findAll().first()
-    if(resultsSeverity.toInteger() > severityLimit) {
+    regex = resultsBlockers.first()
+    result = regex.substring((regex.indexOf(':') + 1))
+    resultint = result as int
+    println result
+    println resultint
+    if(resultint > severityLimit) {
         error("Too many errors reported, aborting")
     }
     else {
         println "Number of errors (" + resultsSeverity + ") below limit (" + severityLimit + ") found"
-    }*/
+    }
 }
