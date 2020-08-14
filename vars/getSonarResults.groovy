@@ -3,7 +3,7 @@ def call() {
     def loopinterator = 0
     def checkStatusPattern = '"status":"SUCCESS"'
     def proceed = 0
-    def resultsPattern = 'total":([^,}][^"])'
+    def resultsPattern = 'total":([^(,|})]*)'
     def severityLimit = 25
 
     while (proceed) {
