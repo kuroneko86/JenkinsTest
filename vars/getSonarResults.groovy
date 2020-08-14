@@ -9,7 +9,7 @@ def call() {
     def jsonSlurper = new JsonSlurper()
 
     while (!proceed) {
-        printlin "Checking report readiness..."
+        println "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
         def reportStatus = jsonSlurper.parseText(getSonarResults)
         println reportStatus
