@@ -6,6 +6,7 @@ def call() {
     def proceed = 0
     def severityLimit = 25
     def jsonSlurper = new JsonSlurper()
+    def sonarTaskID = steps.sh(script: "echo ${sonarTaskID}", returnStdout: true)
 
     while (!proceed) {
         println "Checking report readiness..."
