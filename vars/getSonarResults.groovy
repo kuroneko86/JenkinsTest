@@ -1,15 +1,21 @@
 def call() {
     def loopLimit = 12
     def loopinterator = 0
-    def checkStatusPattern = '"status":"SUCCESS"'
     def proceed = 0
-    def resultsPattern = 'total":([^(,|})]*)'
     def severityLimit = 25
+
+    def jsonSlurper = new JsonSlurper()
 
     while (!proceed) {
         printlin "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
-        if(getSonarResults =~ checkStatusPattern) {
+        def reportStatus = jsonSlurper.parseText(getSonarResults)
+        println reportStatus
+        println reportStatus[0]
+        println reportStatus[1]
+        println reportStatus[0][0]
+        println reportStatus[1][0]
+        if(reportStatus == "OK") {
             println "Report ready"
             proceed = 1
         }
@@ -23,28 +29,12 @@ def call() {
         }
     }
 
-    def checkBlockers = steps.sh(script: "curl 'http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER'", returnStdout: true)
-    def resultsBlockers = (checkBlockers =~ resultsPattern).findAll().first()
-    regex = resultsBlockers.first()
-    result = regex.substring((regex.indexOf(':') + 1))
-    resultint = result as int
-    if(resultint > 0) {
-        error("Blocker found in results, aborting")
+    def checkQualityGate = steps.sh(script: "curl 'http://192.168.10.106:9000/api/qualitygates/project_status?projectKey=$sonarProjectKey'", returnStdout: true)
+    def qualityGate = jsonSlurper.parseText(checkQualityGate)
+    if(qualityGate == "OK") {
+        println "Quality gate passed"
     }
     else {
-        println "No blockers found"
-    }
-
-
-    def checkSeverity = steps.sh(script: "curl 'http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR'", returnStdout: true)
-    def resultsSeverity = (checkSeverity =~ resultsPattern).findAll().first()
-    regex = resultsSeverity.first()
-    result = regex.substring((regex.indexOf(':') + 1))
-    resultint = result as int
-    if(resultint > severityLimit) {
-        error("Too many errors reported, aborting")
-    }
-    else {
-        println "Number of errors (" + resultint + ") below limit (" + severityLimit + ") found"
+        error("Quality gate failed, aborting")
     }
 }
