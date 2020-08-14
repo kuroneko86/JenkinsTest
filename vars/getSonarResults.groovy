@@ -14,10 +14,8 @@ def call() {
         json = sonarQube.getSonarQubeResults(sonarTaskID)
         println json
         reportStatus = readJSON text: json
-        println reportStatus['task']
-        println reportStatus['task']['status']
 
-        if(reportStatus == "OK") {
+        if(reportStatus['task']['status'] == "SUCCESS") {
             println "Report ready"
             proceed = 1
         }
@@ -31,9 +29,12 @@ def call() {
         }
     }
 
-    def checkQualityGate = steps.sh(script: "curl 'http://192.168.10.106:9000/api/qualitygates/project_status?projectKey=$sonarProjectKey'", returnStdout: true)
-    def qualityGate = jsonSlurper.parseText(checkQualityGate)
-    if(qualityGate == "OK") {
+    qualityGateUrl = "http://192.168.10.106:9000/api/qualitygates/project_status?projectKey=$sonarProjectKey"
+    json = sonarQube.getSonarQubeResults(qualityGateUrl)
+    println json
+    qualityGateStatus = readJSON text: json
+    println qualityGateStatus['projectStatus']['status']
+    if(qualityGateStatus['projectStatus']['status'] == "OK") {
         println "Quality gate passed"
     }
     else {
