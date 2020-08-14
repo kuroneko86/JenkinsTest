@@ -28,7 +28,7 @@ def call() {
     regex = resultsBlockers.first()
     result = regex.substring((regex.indexOf(':') + 1))
     resultint = result as int
-    println result.toInteger
+    println result
     println resultint
     if(resultint > 0) {
         error("Blocker found in results, aborting")
