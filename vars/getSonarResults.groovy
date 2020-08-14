@@ -1,22 +1,16 @@
-import groovy.json.JsonSlurperClassic
+import com.kukan.sonarQube
 
-@NonCPS def call() {
+def call() {
     def loopLimit = 12
     def loopinterator = 0
     def proceed = 0
     def severityLimit = 25
-    def jsonSlurper = new JsonSlurperClassic()
 
     while (!proceed) {
         println "Checking report readiness..."
-        def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
-        def reportStatus = jsonSlurper.parseText(getSonarResults)
-        //def reportStatus = readJSON text: '$getSonarResults'
-        println reportStatus
-        println reportStatus[0]
-        println reportStatus[1]
-        println reportStatus[0][0]
-        println reportStatus[1][0]
+        
+        reportStatus = getSonarQubeResults(sonarTaskID)
+        
         if(reportStatus == "OK") {
             println "Report ready"
             proceed = 1
