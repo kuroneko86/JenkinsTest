@@ -5,12 +5,13 @@ def call() {
     def loopinterator = 0
     def proceed = 0
     def severityLimit = 25
-    def jsonSlurper = new JsonSlurper()
+    //def jsonSlurper = new JsonSlurper()
 
     while (!proceed) {
         println "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
-        def reportStatus = jsonSlurper.parseText(getSonarResults)
+        //def reportStatus = jsonSlurper.parseText(getSonarResults)
+        def reportStatus = readJSON text: '$getSonarResults'
         println reportStatus
         println reportStatus[0]
         println reportStatus[1]
