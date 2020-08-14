@@ -6,10 +6,12 @@ def call() {
     def proceed = 0
     def severityLimit = 25
 
+    def sonarQube = new sonarQube()
+
     while (!proceed) {
         println "Checking report readiness..."
         
-        reportStatus = getSonarQubeResults(sonarTaskID)
+        reportStatus = sonarQube.getSonarQubeResults(sonarTaskID)
         
         if(reportStatus == "OK") {
             println "Report ready"

@@ -3,18 +3,21 @@ package com.kukan
 import com.cloudbees.groovy.cps.NonCPS
 import groovy.json.JsonSlurperClassic
 
-@NonCPS
-def getSonarQubeResults(String url)
-{
-    println url
+class sonarQube {
 
-    def jsonSlurper = new JsonSlurperClassic()
-    def getSonarResults = steps.sh(script: "curl " + url, returnStdout: true)
-    def reportStatus = jsonSlurper.parseText(getSonarResults)
+    @NonCPS
+    def getSonarQubeResults(String url)
+    {
+        println url
 
-    println reportStatus
-    println reportStatus[0]
-    println reportStatus[1]
-    println reportStatus[0][0]
-    println reportStatus[1][0]
+        def jsonSlurper = new JsonSlurperClassic()
+        def getSonarResults = steps.sh(script: "curl " + url, returnStdout: true)
+        def reportStatus = jsonSlurper.parseText(getSonarResults)
+
+        println reportStatus
+        println reportStatus[0]
+        println reportStatus[1]
+        println reportStatus[0][0]
+        println reportStatus[1][0]
+    }
 }
