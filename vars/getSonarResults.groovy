@@ -23,7 +23,7 @@ def call() {
         else {
             println "Report not ready yet, waiting 5 seconds";
             loopinterator++
-            sleep(5000)
+            sleep(5)
         }
     }
 
