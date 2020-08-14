@@ -3,7 +3,7 @@ package com.kukan
 import com.cloudbees.groovy.cps.NonCPS
 import groovy.json.JsonSlurperClassic
 
-@NONCPS
+@NonCPS
 def getSonarQubeResults(String url)
 {
     println url
