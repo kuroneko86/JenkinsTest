@@ -11,7 +11,7 @@ def call() {
             printlin "Report ready"
             $proceed = 1
         }
-        else if (loopinterator >= loopLimit{
+        else if (loopinterator >= loopLimit) {
             error ("Report is taking too long, aborting")            
         }
         else {
