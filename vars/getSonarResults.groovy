@@ -6,7 +6,7 @@ def call() {
     def resultsPattern = 'total":([^(,|})]*)'
     def severityLimit = 25
 
-    while (proceed) {
+    while (!proceed) {
         printlin "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
         if(getSonarResults =~ checkStatusPattern) {
