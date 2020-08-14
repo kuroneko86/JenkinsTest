@@ -5,6 +5,8 @@ import groovy.json.JsonSlurperClassic
 
 class sonarQube {
 
+    def steps
+
     sonarQube(steps)
     {
         this.steps = steps
