@@ -2,14 +2,14 @@ def call() {
     def loopLimit = 12
     def loopinterator = 0
     def checkStatusPattern = '"status":"SUCCESS"'
-    def continue = false
+    def proceed = 0
 
     do {
         printlin "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
         if(getSonarResults =~ checkStatusPattern) {
             printlin "Report ready"
-            $continue = true
+            $proceed = 1
         }
         elseif (loopinterator >= loopLimit{
             error ("Report is taking too long, aborting")            
@@ -19,7 +19,7 @@ def call() {
             loopinterator++
             sleep(5000)
         }
-    } while ($continue)
+    } while ($proceed)
 
     if(!$abort) {
         def resultsPattern = 'total":([^,]*)'
