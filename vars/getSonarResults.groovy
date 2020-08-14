@@ -13,6 +13,11 @@ def call() {
         
         reportStatus = sonarQube.getSonarQubeResults(sonarTaskID)
         
+        println reportStatus[0]
+        println reportStatus[1]
+        println reportStatus[0][0]
+        println reportStatus[1][0]
+
         if(reportStatus == "OK") {
             println "Report ready"
             proceed = 1
