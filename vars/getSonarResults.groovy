@@ -21,27 +21,25 @@ def call() {
         }
     }
 
-    if(!abort) {
-        def resultsPattern = 'total":([^,]*)'
-        def severityLimit = 25
+    def resultsPattern = 'total":([^,]*)'
+    def severityLimit = 25
 
-        def checkBlockers = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER", returnStdout: true)
-        def resultsBlockers = (checkBlockers =~ taskIDPattern).findAll().first()
-        if(resultsBlockers > 0) {
-            error("Blocker found in results, aborting")
-        }
-        else {
-            println "No blockers found"
-        }
+    def checkBlockers = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER", returnStdout: true)
+    def resultsBlockers = (checkBlockers =~ taskIDPattern).findAll().first()
+    if(resultsBlockers > 0) {
+        error("Blocker found in results, aborting")
+    }
+    else {
+        println "No blockers found"
+    }
 
 
-        def checkSeverity = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR", returnStdout: true)
-        def resultsSeverity = (checkSeverity =~ taskIDPattern).findAll().first()
-        if(resultsSeverity > severityLimit) {
-            error("Too many errors reported, aborting")
-        }
-        else {
-            println "Number of errors (" + resultsSeverity + ") below limit (" + severityLimit + ") found"
-        }
+    def checkSeverity = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR", returnStdout: true)
+    def resultsSeverity = (checkSeverity =~ taskIDPattern).findAll().first()
+    if(resultsSeverity > severityLimit) {
+        error("Too many errors reported, aborting")
+    }
+    else {
+        println "Number of errors (" + resultsSeverity + ") below limit (" + severityLimit + ") found"
     }
 }
