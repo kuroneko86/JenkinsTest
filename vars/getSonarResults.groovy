@@ -4,7 +4,7 @@ def call() {
     def checkStatusPattern = '"status":"SUCCESS"'
     def proceed = 0
 
-    do {
+    while ($proceed) {
         printlin "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
         if(getSonarResults =~ checkStatusPattern) {
@@ -19,7 +19,7 @@ def call() {
             loopinterator++
             sleep(5000)
         }
-    } while ($proceed)
+    }
 
     if(!$abort) {
         def resultsPattern = 'total":([^,]*)'
