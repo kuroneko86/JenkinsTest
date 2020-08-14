@@ -12,7 +12,8 @@ def call() {
         println "Checking report readiness..."
         
         json = sonarQube.getSonarQubeResults(sonarTaskID)
-        reportStatus = readJSON text: json
+        println json
+        reportStatus = readJSON text: "" + json
         println reportStatus[0]
         println reportStatus[1]
         println reportStatus[0][0]
