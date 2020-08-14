@@ -10,14 +10,14 @@ def call() {
         printlin "Checking report readiness..."
         def getSonarResults = steps.sh(script: "curl $sonarTaskID", returnStdout: true)
         if(getSonarResults =~ checkStatusPattern) {
-            printlin "Report ready"
+            println "Report ready"
             proceed = 1
         }
         else if (loopinterator >= loopLimit) {
             error ("Report is taking too long, aborting")            
         }
         else {
-            printlin "Report not ready yet, waiting 5 seconds";
+            println "Report not ready yet, waiting 5 seconds";
             loopinterator++
             sleep(5000)
         }
@@ -28,8 +28,6 @@ def call() {
     regex = resultsBlockers.first()
     result = regex.substring((regex.indexOf(':') + 1))
     resultint = result as int
-    println result
-    println resultint
     if(resultint > 0) {
         error("Blocker found in results, aborting")
     }
@@ -40,15 +38,13 @@ def call() {
 
     def checkSeverity = steps.sh(script: "curl 'http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR'", returnStdout: true)
     def resultsSeverity = (checkSeverity =~ resultsPattern).findAll().first()
-    regex = resultsBlockers.first()
+    regex = resultsSeverity.first()
     result = regex.substring((regex.indexOf(':') + 1))
     resultint = result as int
-    println result
-    println resultint
     if(resultint > severityLimit) {
         error("Too many errors reported, aborting")
     }
     else {
-        println "Number of errors (" + resultsSeverity + ") below limit (" + severityLimit + ") found"
+        println "Number of errors (" + resultint + ") below limit (" + severityLimit + ") found"
     }
 }
