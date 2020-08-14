@@ -24,8 +24,8 @@ def call() {
     }
 
     def checkBlockers = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=BLOCKER", returnStdout: true)
-    def resultsBlockers = (checkBlockers =~ resultsPattern).findAll().first().toInteger()
-    if(resultsBlockers > 0) {
+    def resultsBlockers = (checkBlockers =~ resultsPattern).findAll().first()
+    if(resultsBlockers.toInteger() > 0) {
         error("Blocker found in results, aborting")
     }
     else {
@@ -34,8 +34,8 @@ def call() {
 
 
     def checkSeverity = steps.sh(script: "curl http://192.168.10.106:9000/api/issues/search?pageSize=500&componentKeys=$sonarProjectKey&ps=500&p=1&severities=CRITICAL,MAJOR", returnStdout: true)
-    def resultsSeverity = (checkSeverity =~ resultsPattern).findAll().first().toInteger()
-    if(resultsSeverity > severityLimit) {
+    def resultsSeverity = (checkSeverity =~ resultsPattern).findAll().first()
+    if(resultsSeverity.toInteger() > severityLimit) {
         error("Too many errors reported, aborting")
     }
     else {
