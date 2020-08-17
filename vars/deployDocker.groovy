@@ -1,11 +1,11 @@
 def call() {
-    def sout = new StringBuilder(), serr = new StringBuilder()
-    def proc = 'docker ps -f name=${containerName}'.execute()
-    proc.consumeProcessOutput(sout, serr)
-    proc.waitForOrKill(30000)
-    println "out> $sout err> $serr"
-    if($sout.indexOf(${containerName}))
+    def checkInstance = steps.sh(script: "docker ps -f name=${containerName}", returnStdout: true)
+    if(checkInstance.indexOf(containerName))
     {
-        //kill it
+        println steps.sh(script: "docker stop ${containerName}", returnStdout: true)
+        println steps.sh(script: "docker rm ${containerName}", returnStdout: true)
     }
+
+    println steps.sh(script: "docker create --name ${containerName} --restart always -p 8181:8080 $registry:$BUILD_NUMBER", returnStdout: true)
+    println steps.sh(script: "docker start ${containerName}", returnStdout: true)
 }
