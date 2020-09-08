@@ -1,6 +1,6 @@
 import com.kukan.sonarQube
 
-def call() {
+def call(String sonarProjectKey, String sonarTaskID) {
     def loopLimit = 12
     def loopinterator = 0
     def proceed = 0
