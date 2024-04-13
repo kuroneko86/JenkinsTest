@@ -29,7 +29,7 @@ def call(String sonarProjectKey, String sonarTaskID) {
         }
     }
 
-    qualityGateUrl = "http://192.168.10.106:9000/api/qualitygates/project_status?projectKey=$sonarProjectKey"
+    qualityGateUrl = "http://192.168.10.37:9000/api/qualitygates/project_status?projectKey=$sonarProjectKey"
     json = sonarQube.getSonarQubeResults(qualityGateUrl)
     println json
     qualityGateStatus = readJSON text: json
