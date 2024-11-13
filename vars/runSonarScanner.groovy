@@ -1,4 +1,4 @@
-def call(String sonarProjectKey, String sonarLogin) {
+def call() {
     def workspace = WORKSPACE
     def taskIDPattern = "INFO: More about the report processing at (.*)"
     def execSonar = steps.sh(script: "sonar-scanner-6.2.1.4610-linux-x64/bin/sonar-scanner -Dsonar.host.url=http://192.168.10.37:9000", returnStdout: true)
