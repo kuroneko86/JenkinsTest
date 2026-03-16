@@ -6,5 +6,5 @@ def call(String sonarLogin) {
     def sonarTaskID = (execSonar =~ taskIDPattern).findAll().first()
     println sonarTaskID
     env.sonarTaskID = sonarTaskID[1]
-    def removeSonar = steps.sh(script: "rm sonar-scanner-6.2.1.4610-linux-x64/ -r")
+    def removeSonar = steps.sh(script: "rm sonar-scanner-8.0.1.6346-linux-x64/ -r")
 }
